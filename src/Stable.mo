@@ -207,9 +207,11 @@ module {
       let bits = 32 - leadingZeros(s);
       let limit = s >> (bits >> 1);
       if (d > limit) {
+        mem.old := ?mem.new;
         old := ?new;
         mem.i_old := mem.i_new;
-        new := Vector<X>( VectorNewMem<X>() );
+        mem.new := VectorNewMem<X>();
+        new := Vector<X>( mem.new );
         mem.i_new += size;
       };
     };
@@ -226,6 +228,7 @@ module {
         // free old is possible
         if (end_ >= mem.i_new) {
           old := null;
+          mem.old := null;
           mem.i_old := mem.i_new;
         };
       } else if (end_ >= mem.i_old) {
